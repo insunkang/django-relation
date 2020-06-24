@@ -3,6 +3,9 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth import login as auth_login, logout as auth_logout, update_session_auth_hash
+
+from django.contrib import messages
+
 from .forms import CustomUserChangeForm
 
 from IPython import embed
@@ -20,6 +23,8 @@ def signup(request):
             user = form.save()
             auth_login(request,user)
             return redirect('articles:index')
+        
+            
 
     else:
         form = UserCreationForm()
@@ -41,9 +46,11 @@ def login(request):
             #그럼 무엇을 확인해야 하는가? -> 세션과 유저 정보
             auth_login(request,form.get_user())
             return redirect('articles:index')
-        
+    
+    
     else:
         form =  AuthenticationForm()
+        
     context = {
         'form' : form
     }
@@ -51,6 +58,8 @@ def login(request):
 
 def logout(request):
     auth_logout(request)
+    
+    messages.warning(request,'로그아웃 성공')
     return redirect('articles:index')
 @require_POST
 def delete(request):

@@ -5,16 +5,30 @@
 <p>{{ article.pk }}번째 글</p>
 <h2>{{ article.title }}</h2>
 <h3>{{ article.content }}</h3>
+<h3>작성자 : {{ article.user.username }}</h3>
+
+{% if article.image %}
+<img src="{{ article.image_thumbnail.url }}" alt="{{ article.image }}">
+{% else %}
+<img src="" alt="">
+{% endif %}
+
 
 <hr>
 
+
 {% for data in article.comment_set.all %}
   {{ data.content }}  
+  {{ data.user.username }}
     <!-- 2개 이상의 값을 넘겨주고자 할 때 순서 주의 -->
-    <form action="{% url 'articles:comment_delete' article.pk data.pk %}" method="POST">
-      {% csrf_token %}
-      <input type="submit" value="댓글삭제">
-    </form>
+    {% if data.user == user %}
+      <form action="{% url 'articles:comment_delete' article.pk data.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="댓글삭제">
+      </form> 
+    {% else %}
+      <p></p>
+    {% endif %}
   <p></p>
 {% endfor %}
 
@@ -27,11 +41,16 @@
 </form>
 <hr>
 
-<a href="{% url 'articles:update' article.pk %}">[UPDATE]</a>
+
 <a href="{% url 'articles:index' %}">[back]</a>
 <form action="{% url 'articles:delete' article.pk %}" method="POST">
   {% csrf_token %}
-  <input type="submit" value="DELETE" class="btn btn-primary">
+  {% if article.user == user %}
+    <a href="{% url 'articles:update' article.pk %}">[UPDATE]</a>
+    <input type="submit" value="DELETE" class="btn btn-primary">
+  {% else %}
+    <p></p>
+  {% endif %}
 </form>
 
 {% endblock %}

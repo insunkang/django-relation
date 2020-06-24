@@ -9,8 +9,20 @@
 </head>
 <body>
   <h1>{{ user.username }}</h1>
+  {% if messages %}
+      {% for data in messages %} 
+      <div class="row" style="margin:20px auto;">
+      <div class="col-sm-12">
+        <div class="alert alert-{{data.tags}}">
+          <strong>{{data.tags}} </strong>{{data.message}}
+        
+        </div>
+      </div>
+      </div>        
+      {% endfor %}
+    {% endif %}
   {% if user.is_authenticated %}
-    <a href="{% url 'accounts:logout' %}">로그아웃</a>  
+    <a href="{% url 'accounts:logout' %}">로그아웃</a>
     <a href="{% url 'accounts:update' %}">회원수정</a>  
     <a href="{% url 'accounts:password' %}">비밀번호 수정</a>  
     <form action="{% url 'accounts:delete' %}" method="POST">
