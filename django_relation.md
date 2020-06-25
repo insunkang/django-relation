@@ -45,3 +45,21 @@ comment.article.content
 # article의 경우는?
 article.comment_set.all()
 ```
+
+## 0625 M:N
+
+```python
+doctor = Doctor.objects.create(name='KIM') 
+patient = Patient.objects.create(name='TOM') 
+Reservation.objects.create(doctor=doctor,patient=patient)
+<Reservation: 1의사 KIM의 1번 환자, TOM>
+
+ doctor.reservation_set.all()
+ <QuerySet [<Reservation: 1의사 KIM의 1번 환자, TOM>]>
+```
+
+```python
+like_users = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='like_articles',
+    blank=True)
+    # article에 좋아여 기능
+```

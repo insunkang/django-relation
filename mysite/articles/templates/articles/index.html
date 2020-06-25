@@ -5,9 +5,34 @@
 <a href="{% url 'articles:create' %}">[CREATE]</a>
 <hr>
 {% for article in articles %}
- <p>{{ article.pk }}번째 글</p>
- <p>{{ article.title }}</p>
- <a href="{% url 'articles:detail' article.pk %}">[DETAIL]</a>
- <hr>
+<div class="card" style="width: 18rem;">
+  {% if article.image %}
+  <img src="{{ article.image_thumbnail.url }}" class ="card-img-top" alt="{{ article.image }}">
+  {% else %}
+  {% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{ article.pk }}번째 글</h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{ article.title }}</h6>
+    <p class="card-text">댓글 개수: {{article.comment_set.all|length}}</p>
+    <p class="card-text">좋아요 개수: {{article.like_users.all|length}}</p>
+    <p class="card-text">추천 개수: {{article.recommend_users.all|length}}</p>
+    <hr>
+
+    {% include 'articles/_like.html' %}
+
+    
+
+    {% if user in article.recommned_users.all %}
+      <a href="{% url 'articles:recommend' article.pk %}" class="card-link">추천 취소</a>
+    {% else %}
+      <a href="{% url 'articles:recommend' article.pk %}" class="card-link">추천</a>
+    {% endif %}
+    <a href="{% url 'articles:detail' article.pk %}" class="card-link">[DETAIL]</a>
+    
+  </div>
+</div>
+
+ 
+  
 {% endfor %}
 {% endblock %}

@@ -15,8 +15,8 @@
 
 
 <hr>
-
-
+{% include 'articles/_like.html' %}
+<hr>
 {% for data in article.comment_set.all %}
   {{ data.content }}  
   {{ data.user.username }}

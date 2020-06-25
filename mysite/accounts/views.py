@@ -1,12 +1,12 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm,get_user_model
 from django.contrib.auth import login as auth_login, logout as auth_logout, update_session_auth_hash
 
 from django.contrib import messages
 
-from .forms import CustomUserChangeForm
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 from IPython import embed
  
@@ -17,7 +17,7 @@ def signup(request):
         return redirect('articles:index')
     # embed()
     elif request.method =="POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         
         if form.is_valid():
             user = form.save()
@@ -27,7 +27,7 @@ def signup(request):
             
 
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     context = {
         'form' : form
     }
@@ -97,4 +97,10 @@ def password(request):
     return render(request, 'accounts/password.html',context)
 
 
-        
+@login_required
+def profile(request,username):
+    person = get_object_or_404(get_user_model(),username=username)
+    context = {
+        'person':person
+    }
+    return render(request, 'accounts/profile.html',context) 
