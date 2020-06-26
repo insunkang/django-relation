@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 from .models import Article,Comment
 from .forms import ArticleForm,CommentForm
@@ -9,6 +10,13 @@ from .forms import ArticleForm,CommentForm
 # Create your views here.
 def index(request):
     articles = Article.objects.all()
+    # 1. Paginator(전체 리스트, 한 페이지당 갯수)
+    paginator = Paginator(articles, 3)
+    # 2. 몇 번째 페이지를 보여줄 것인지 GET으로 
+    # 'articles/?page=3'
+    page = request.GET.get('page')
+    # 해당하는 페이지의 게시글만 가져오기
+    articles = paginator.get_page(page)
     context = {
         'articles': articles
     }

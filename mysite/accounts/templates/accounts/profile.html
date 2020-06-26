@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 {% block body %}
 <h1>{{person.username}}</h1>
+
+{% if user == person %}
+  
+{% else %}
+  <P>팔로우 하기</P>
+  {% if user in person.followers.all %}
+    <a href="{% url 'accounts:follow' person.pk %}">팔로우 취소</a>
+  {% else %}
+    <a href="{% url 'accounts:follow' person.pk %}">팔로우</a>
+  {% endif %}
+{% endif %}
+
 <p>유저가 작성한 게시글들</p>
 <ul>
   {% for article in person.article_set.all %}
@@ -27,4 +39,5 @@
     <p>좋아요를 누른 적이 없습니다.</p>
   {% endfor %}
 </ul>
+
 {% endblock %}

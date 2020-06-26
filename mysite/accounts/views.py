@@ -104,3 +104,17 @@ def profile(request,username):
         'person':person
     }
     return render(request, 'accounts/profile.html',context) 
+
+@login_required
+def follow(request,user_pk):
+    # person에 담긴 user_pk값을 가진 유저는 팔로우 프로필의 주인이다.
+    # request.user는 나. 요청을 보내온 사용자이다.
+    person = get_object_or_404(get_user_model(),pk=user_pk)
+    follower = request.user
+
+    if follower in person.followers.all():
+        person.followers.remove(follower)
+    else:
+        person.followers.add(follower)
+
+    return redirect('accounts:profile', person.username)

@@ -10,6 +10,10 @@ urlpatterns = [
     path('delete/', views.delete, name="delete"),
     path('update/', views.update, name="update"),
     path('password/',views.password, name="password"),
-    path('<str:username>/',views.profile,name="profile"),
+    path('follow/<int:user_pk>/',views.follow,name="follow"),
+    #상단으로 가면 accounts뒤에오는 모든 문자열이 다 적용된다 그래서 맨 밑
+    path('<str:username>/',views.profile,name="profile"), 
+
+    
 
 ]

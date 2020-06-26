@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class User(AbstractUser):
-    followrs = models.ManyToManyField(
+    followers = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="followings",
         blank=True
