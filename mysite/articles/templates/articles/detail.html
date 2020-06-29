@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
+{% load static %}
 <h1>상세 페이지</h1>
 <hr>
 <p>{{ article.pk }}번째 글</p>
@@ -52,5 +53,5 @@
     <p></p>
   {% endif %}
 </form>
-
+  <script src="{% static 'articles/js/like.js' %}"></script>
 {% endblock %}

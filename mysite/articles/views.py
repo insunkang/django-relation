@@ -3,6 +3,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 from .models import Article,Comment
 from .forms import ArticleForm,CommentForm
@@ -118,12 +119,15 @@ def like(request, article_pk):
     # 사용자가 게시글의 종하요 목록에 있으면
     if user in article.like_users.all():
         article.like_users.remove(user)
+        liked = False
     else:
         article.like_users.add(user)
-    if request.resolver_match.url_name=="detail":
-        return redirect('articles:detail')
-    else:
-        return redirect('articles:index')
+        liked = True
+    context={
+        'liked': liked,
+        'count': article.like_users.count()
+    }
+    return JsonResponse(context)
     
 
 
